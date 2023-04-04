@@ -1,9 +1,14 @@
 package alibaba
 
 import (
+	"os"
+
 	"github.com/open-tdp/libcloud/provider"
+	"github.com/open-tdp/libcloud/setting"
 
 	ac "github.com/alibabacloud-go/darabonba-openapi/v2/client"
+	au "github.com/alibabacloud-go/tea-utils/v2/service"
+	tea "github.com/alibabacloud-go/tea/tea"
 
 	alidns "github.com/alibabacloud-go/alidns-20150109/v4/client"
 	ecs "github.com/alibabacloud-go/ecs-20140526/v3/client"
@@ -12,14 +17,16 @@ import (
 
 type Client struct {
 	*provider.ReqeustParam
-	config *ac.Config
+	config  *ac.Config
+	runtime *au.RuntimeOptions
 }
 
 func NewClient(rq *provider.ReqeustParam) *Client {
 
-	c := &Client{rq, nil}
+	c := &Client{rq, nil, nil}
 
 	c.NewConfig()
+	c.NewRuntime()
 
 	return c
 
@@ -27,11 +34,35 @@ func NewClient(rq *provider.ReqeustParam) *Client {
 
 func (c *Client) NewConfig() {
 
-	c.config = &ac.Config{
-		AccessKeyId:     &c.SecretId,
-		AccessKeySecret: &c.SecretKey,
-		RegionId:        &c.RegionId,
+	if setting.Debug {
+		os.Setenv("DEBUG", "tea")
 	}
+
+	config := &ac.Config{
+		AccessKeyId:     tea.String(c.SecretId),
+		AccessKeySecret: tea.String(c.SecretKey),
+		RegionId:        tea.String(c.RegionId),
+	}
+
+	// 回传参数
+	c.config = config
+
+}
+
+func (c *Client) NewRuntime() {
+
+	runtime := &au.RuntimeOptions{
+		// 自动重试机制
+		Autoretry:   tea.Bool(true),
+		MaxAttempts: tea.Int(2),
+
+		// 超时配置（单位 ms）
+		ConnectTimeout: tea.Int(5000),
+		ReadTimeout:    tea.Int(10000),
+	}
+
+	// 回传参数
+	c.runtime = runtime
 
 }
 
