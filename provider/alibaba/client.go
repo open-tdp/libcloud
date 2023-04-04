@@ -2,6 +2,7 @@ package alibaba
 
 import (
 	"os"
+	"regexp"
 
 	"github.com/open-tdp/libcloud/provider"
 	"github.com/open-tdp/libcloud/setting"
@@ -9,10 +10,6 @@ import (
 	ac "github.com/alibabacloud-go/darabonba-openapi/v2/client"
 	au "github.com/alibabacloud-go/tea-utils/v2/service"
 	tea "github.com/alibabacloud-go/tea/tea"
-
-	alidns "github.com/alibabacloud-go/alidns-20150109/v4/client"
-	ecs "github.com/alibabacloud-go/ecs-20140526/v3/client"
-	swas "github.com/alibabacloud-go/swas-open-20200601/client"
 )
 
 type Client struct {
@@ -66,20 +63,36 @@ func (c *Client) NewRuntime() {
 
 }
 
-func (c *Client) Alidns() (*alidns.Client, error) {
+// 处理错误
 
-	return alidns.NewClient(c.config)
+func (c *Client) Error(err any) *provider.ResponseError {
 
-}
+	if er, ok := err.(*tea.SDKError); ok {
+		exp := regexp.MustCompile(`^code: \d+, (.+) request id.+$`)
+		msg := exp.ReplaceAllString(*er.Message, "$1")
+		return &provider.ResponseError{
+			Code:    *er.Code,
+			Message: msg,
+		}
+	}
 
-func (c *Client) Ecs() (*ecs.Client, error) {
+	if er, ok := err.(error); ok {
+		return &provider.ResponseError{
+			Code:    "Nil",
+			Message: er.Error(),
+		}
+	}
 
-	return ecs.NewClient(c.config)
+	if er, ok := err.(string); ok {
+		return &provider.ResponseError{
+			Code:    "Nil",
+			Message: er,
+		}
+	}
 
-}
-
-func (c *Client) Swas() (*swas.Client, error) {
-
-	return swas.NewClient(c.config)
+	return &provider.ResponseError{
+		Code:    "Nil",
+		Message: "Unkown",
+	}
 
 }

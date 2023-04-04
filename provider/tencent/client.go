@@ -1,18 +1,16 @@
 package tencent
 
 import (
+	"regexp"
 	"strings"
 
 	"github.com/open-tdp/libcloud/provider"
 	"github.com/open-tdp/libcloud/setting"
 
 	tc "github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common"
+	te "github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common/errors"
 	th "github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common/http"
 	tp "github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common/profile"
-
-	cvm "github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/cvm/v20170312"
-	dnspod "github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/dnspod/v20210323"
-	lighthouse "github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/lighthouse/v20200324"
 )
 
 type Client struct {
@@ -74,20 +72,36 @@ func (c *Client) NewProfile() {
 
 }
 
-func (c *Client) Cvm() (client *cvm.Client, err error) {
+// 处理错误
 
-	return cvm.NewClient(c.credential, c.RegionId, c.profile)
+func (c *Client) Error(err any) *provider.ResponseError {
 
-}
+	if er, ok := err.(*te.TencentCloudSDKError); ok {
+		exp := regexp.MustCompile(`\[request id:.+\]`)
+		ret := strings.Split(exp.ReplaceAllString(er.Message, ""), "\n")[0]
+		return &provider.ResponseError{
+			Code:    er.Code,
+			Message: ret,
+		}
+	}
 
-func (c *Client) Dnspod() (client *dnspod.Client, err error) {
+	if er, ok := err.(error); ok {
+		return &provider.ResponseError{
+			Code:    "Nil",
+			Message: er.Error(),
+		}
+	}
 
-	return dnspod.NewClient(c.credential, c.RegionId, c.profile)
+	if er, ok := err.(string); ok {
+		return &provider.ResponseError{
+			Code:    "Nil",
+			Message: er,
+		}
+	}
 
-}
-
-func (c *Client) Lighthouse() (client *lighthouse.Client, err error) {
-
-	return lighthouse.NewClient(c.credential, c.RegionId, c.profile)
+	return &provider.ResponseError{
+		Code:    "Nil",
+		Message: "Unkown",
+	}
 
 }

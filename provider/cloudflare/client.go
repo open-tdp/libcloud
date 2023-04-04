@@ -2,6 +2,7 @@ package cloudflare
 
 import (
 	"context"
+	"strconv"
 
 	"github.com/open-tdp/libcloud/provider"
 
@@ -31,5 +32,39 @@ func (c *Client) NewApi() error {
 	c.api = api
 
 	return err
+
+}
+
+// 处理错误
+
+func (c *Client) Error(err any) *provider.ResponseError {
+
+	if er, ok := err.(*cf.Error); ok {
+		code := er.Messages[0].Code
+		msg := er.Messages[0].Message
+		return &provider.ResponseError{
+			Code:    strconv.Itoa(code),
+			Message: msg,
+		}
+	}
+
+	if er, ok := err.(error); ok {
+		return &provider.ResponseError{
+			Code:    "Nil",
+			Message: er.Error(),
+		}
+	}
+
+	if er, ok := err.(string); ok {
+		return &provider.ResponseError{
+			Code:    "Nil",
+			Message: er,
+		}
+	}
+
+	return &provider.ResponseError{
+		Code:    "Nil",
+		Message: "Unkown",
+	}
 
 }

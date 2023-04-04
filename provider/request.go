@@ -12,7 +12,12 @@ type ReqeustParam struct {
 }
 
 type ResponseResult struct {
-	Errors  []error  `note:"错误信息"`
-	Message []string `note:"消息内容"`
-	Payload any      `note:"请求结果"`
+	Error   ResponseError `note:"错误信息"`
+	Message []string      `note:"消息内容"`
+	Payload any           `note:"请求结果"`
+}
+
+type ResponseError struct {
+	Code    string `note:"错误代码"`
+	Message string `note:"错误信息"`
 }
