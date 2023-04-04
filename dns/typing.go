@@ -1,16 +1,29 @@
 package dns
 
-// Define a DNS Provider interface that matches the one in Apache Libcloud
+// Define a Dns Provider interface that matches the one in Apache Libcloud
 
-type DNSProvider interface {
+type DnsProvider interface {
+
+	// List all zones
+	ListZones() ([]*Zone, error)
+
+	// Detail a zones
+	DetailZone() ([]*Zone, error)
+
 	// Create a new zone
 	CreateZone(zone *Zone) error
+
+	// Update an existing zone
+	UpdateZone(zone *Zone, record *Record) error
 
 	// Delete an existing zone
 	DeleteZone(zone *Zone) error
 
-	// List all zones
-	ListZones() ([]*Zone, error)
+	// List all records in a zone
+	ListRecords(zone *Zone) ([]*Record, error)
+
+	// Detail a record in a zone
+	DetailRecord(zone *Zone, record *Record) error
 
 	// Create a new record in a zone
 	CreateRecord(zone *Zone, record *Record) error
@@ -21,53 +34,28 @@ type DNSProvider interface {
 	// Delete an existing record in a zone
 	DeleteRecord(zone *Zone, record *Record) error
 
-	// List all records in a zone
-	ListRecords(zone *Zone) ([]*Record, error)
+	// List Record Types
+	ListRecordTypes() ([]RecordType, error)
 }
 
-// Zone represents a DNS zone
+// Zone represents a Dns zone
 
 type Zone struct {
-	ID     string
+	Id     string
 	Domain string
-	Type   string
+	Type   ZoneType
 	TTL    int
 	Extra  map[string]interface{}
 }
 
-// Zone Type constants
-
-type ZoneType string
-
-const (
-	ZoneTypePrimary   ZoneType = "PRIMARY"
-	ZoneTypeSecondary ZoneType = "SECONDARY"
-)
-
-// Record represents a DNS record
+// Record represents a Dns record
 
 type Record struct {
-	ID    string
+	Id    string
 	Name  string
-	Type  string
+	Type  RecordType
 	Data  string
 	Zone  *Zone
 	TTL   int
 	Extra map[string]interface{}
 }
-
-// Record Type constants
-
-type RecordType string
-
-const (
-	RecordTypeA     RecordType = "A"
-	RecordTypeAAAA  RecordType = "AAAA"
-	RecordTypeCNAME RecordType = "CNAME"
-	RecordTypeMX    RecordType = "MX"
-	RecordTypeNS    RecordType = "NS"
-	RecordTypePTR   RecordType = "PTR"
-	RecordTypeSOA   RecordType = "SOA"
-	RecordTypeSRV   RecordType = "SRV"
-	RecordTypeTXT   RecordType = "TXT"
-)
