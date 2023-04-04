@@ -47,7 +47,7 @@ func (c *Client) NewProfile() {
 	// 初始化
 	profile := tp.NewClientProfile()
 
-	// 调试开关
+	// 调试模式
 	profile.Debug = setting.Debug
 
 	// 网络错误重试
@@ -56,7 +56,7 @@ func (c *Client) NewProfile() {
 	// API 限频重试
 	profile.RateLimitExceededMaxRetries = 2
 
-	// 启用地域容灾
+	// 地域容灾机制
 	profile.DisableRegionBreaker = false
 	profile.BackupEndpoint = "ap-hongkong." + th.RootDomain
 
