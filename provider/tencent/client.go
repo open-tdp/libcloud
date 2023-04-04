@@ -85,23 +85,9 @@ func (c *Client) Error(err any) *provider.ResponseError {
 		}
 	}
 
-	if er, ok := err.(error); ok {
-		return &provider.ResponseError{
-			Code:    "Nil",
-			Message: er.Error(),
-		}
-	}
+	re := &provider.ResponseError{}
+	re.Create(err)
 
-	if er, ok := err.(string); ok {
-		return &provider.ResponseError{
-			Code:    "Nil",
-			Message: er,
-		}
-	}
-
-	return &provider.ResponseError{
-		Code:    "Nil",
-		Message: "Unkown",
-	}
+	return re
 
 }
