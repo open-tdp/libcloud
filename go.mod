@@ -1,34 +1,23 @@
-module github.com/open-tdp/libcloud
+module github.com/open-tdp/go-libcloud
 
 go 1.18
 
-// Alibaba Cloud
-
 require (
+	// Alibaba Cloud
 	github.com/alibabacloud-go/alidns-20150109/v4 v4.0.2
 	github.com/alibabacloud-go/darabonba-openapi/v2 v2.0.4
 	github.com/alibabacloud-go/ecs-20140526/v3 v3.0.5
 	github.com/alibabacloud-go/swas-open-20200601 v1.0.3
 	github.com/alibabacloud-go/tea v1.1.19
 	github.com/alibabacloud-go/tea-utils/v2 v2.0.1
-)
-
-// Cloudflare
-
-require (
+	// Cloudflare
 	github.com/cloudflare/cloudflare-go v0.64.0
-)
-
-// Tencent Cloud
-
-require (
+	// Tencent Cloud
 	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common v1.0.630
 	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/cvm v1.0.630
 	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/dnspod v1.0.630
 	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/lighthouse v1.0.630
 )
-
-// Indirect
 
 require (
 	github.com/alibabacloud-go/alibabacloud-gateway-spi v0.0.4 // indirect

@@ -4,7 +4,7 @@ import (
 	"context"
 	"strconv"
 
-	"github.com/open-tdp/libcloud/provider"
+	"github.com/open-tdp/go-libcloud/provider"
 
 	cf "github.com/cloudflare/cloudflare-go"
 )

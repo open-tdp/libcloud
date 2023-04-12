@@ -1,7 +1,7 @@
 package drivers
 
 import (
-	"github.com/open-tdp/libcloud/compute"
+	"github.com/open-tdp/go-libcloud/compute"
 )
 
 type TencentLighthouseDriver struct {

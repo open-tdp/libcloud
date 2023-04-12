@@ -1,7 +1,7 @@
 package drivers
 
 import (
-	"github.com/open-tdp/libcloud/dns"
+	"github.com/open-tdp/go-libcloud/dns"
 )
 
 type AlibabaAlidnsDriver struct {
