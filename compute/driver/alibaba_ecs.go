@@ -11,18 +11,19 @@ import (
 type AlibabaEcsDriver struct {
 	client *alibaba.Client
 	ecs    *ecs.Client
+	rq     *provider.ReqeustParam
 }
 
-func NewDriver(rq *provider.ReqeustParam) *AlibabaEcsDriver {
+func NewAlibabaEcsDriver(rq *provider.ReqeustParam) *AlibabaEcsDriver {
 
 	client := alibaba.NewClient(rq)
 	ecs, _ := client.Ecs()
 
-	return &AlibabaEcsDriver{client, ecs}
+	return &AlibabaEcsDriver{client, ecs, rq}
 
 }
 
-func (d AlibabaEcsDriver) ListLocation() (*[]compute.Location, *provider.ResponseError) {
+func (d *AlibabaEcsDriver) ListLocation() (*[]compute.Location, *provider.ResponseError) {
 
 	locations := []compute.Location{}
 
@@ -45,12 +46,12 @@ func (d AlibabaEcsDriver) ListLocation() (*[]compute.Location, *provider.Respons
 
 }
 
-func (d AlibabaEcsDriver) ListNodes(regionId string) (*[]compute.Node, *provider.ResponseError) {
+func (d *AlibabaEcsDriver) ListNodes() (*[]compute.Node, *provider.ResponseError) {
 
 	nodes := []compute.Node{}
 
 	resp, err := d.ecs.DescribeInstances(&ecs.DescribeInstancesRequest{
-		RegionId: &regionId,
+		RegionId: &d.rq.RegionId,
 	})
 
 	if err != nil {
@@ -72,4 +73,33 @@ func (d AlibabaEcsDriver) ListNodes(regionId string) (*[]compute.Node, *provider
 	}
 
 	return &nodes, nil
+}
+
+func (d *AlibabaEcsDriver) DetailNode(nodeId string) (*compute.Node, *provider.ResponseError) {
+
+	node := compute.Node{}
+
+	resp, err := d.ecs.DescribeInstanceAttribute(&ecs.DescribeInstanceAttributeRequest{
+		InstanceId: &nodeId,
+	})
+
+	if err != nil {
+		return nil, d.client.Error(err)
+	}
+
+	node.Id = *resp.Body.InstanceId
+	node.Name = *resp.Body.InstanceName
+	node.State = compute.NodeState(*resp.Body.Status)
+	node.Size = &compute.NodeSize{}
+	node.Image = &compute.NodeImage{
+		Id: *resp.Body.ImageId,
+	}
+	node.PublicIp = resp.Body.PublicIpAddress.String()
+	node.PrivateIp = resp.Body.VpcAttributes.PrivateIpAddress.String()
+	node.Location = &compute.Location{
+		Id: *resp.Body.RegionId,
+	}
+
+	return &node, nil
+
 }
