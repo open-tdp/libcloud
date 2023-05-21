@@ -143,11 +143,12 @@ type NodeImage struct {
 type NodeSize struct {
 	Id           string
 	Name         string
+	Architecture Architecture
+	CPU          int
 	RAM          int
 	Disk         int
 	Bandwidth    int
 	Price        float64
-	Architecture Architecture
 	Extra        map[string]interface{}
 }
 
