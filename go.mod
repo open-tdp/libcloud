@@ -13,7 +13,7 @@ require (
 	// Cloudflare
 	github.com/cloudflare/cloudflare-go v0.64.0
 	// Tencent Cloud
-	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common v1.0.630
+	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common v1.0.660
 	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/cvm v1.0.630
 	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/dnspod v1.0.630
 	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/lighthouse v1.0.630
@@ -34,6 +34,7 @@ require (
 	github.com/json-iterator/go v1.1.10 // indirect
 	github.com/modern-go/concurrent v0.0.0-20180228061459-e0a39a4cb421 // indirect
 	github.com/modern-go/reflect2 v1.0.1 // indirect
+	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/cbs v1.0.660
 	github.com/tjfoc/gmsm v1.3.2 // indirect
 	golang.org/x/net v0.8.0 // indirect
 	golang.org/x/text v0.8.0 // indirect
