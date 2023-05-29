@@ -114,6 +114,7 @@ type NodeResizeOpts struct {
 type StorageVolume struct {
 	Id    string
 	Name  string
+	Type  string
 	Size  int
 	State StorageVolumeState
 }
