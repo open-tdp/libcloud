@@ -421,12 +421,16 @@ func (p *AlibabaEcsDriver) ListSizes() ([]*compute.NodeSize, error) {
 
 	for _, instanceType := range resp.Body.InstanceTypes.InstanceType {
 
+		arch := compute.Architecture(*instanceType.CpuArchitecture)
+
 		sizes = append(sizes, &compute.NodeSize{
 			Id:           *instanceType.InstanceTypeId,
 			Name:         *instanceType.InstanceTypeFamily,
-			Architecture: compute.Architecture(*instanceType.CpuArchitecture),
-			CPU:          int(*instanceType.CpuCoreCount),
-			RAM:          int(*instanceType.MemorySize),
+			Architecture: arch,
+			Gpu:          int(*instanceType.GPUAmount),
+			Cpu:          int(*instanceType.CpuCoreCount),
+			Ram:          int(*instanceType.MemorySize),
+			Disk:         int(*instanceType.DiskQuantity),
 		})
 
 	}

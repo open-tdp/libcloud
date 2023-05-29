@@ -144,8 +144,9 @@ type NodeSize struct {
 	Id           string
 	Name         string
 	Architecture Architecture
-	CPU          int
-	RAM          int
+	Gpu          int
+	Cpu          int
+	Ram          int
 	Disk         int
 	Bandwidth    int
 	Price        float64
