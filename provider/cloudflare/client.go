@@ -11,13 +11,12 @@ import (
 
 type Client struct {
 	*provider.ReqeustParam
-	ctx context.Context
-	api *cf.API
+	Ctx context.Context
 }
 
 func NewClient(rq *provider.ReqeustParam) *Client {
 
-	c := &Client{rq, context.Background(), nil}
+	c := &Client{rq, context.Background()}
 
 	c.NewApi()
 
@@ -25,13 +24,9 @@ func NewClient(rq *provider.ReqeustParam) *Client {
 
 }
 
-func (c *Client) NewApi() error {
+func (c *Client) NewApi() (*cf.API, error) {
 
-	api, err := cf.NewWithAPIToken(c.SecretKey)
-
-	c.api = api
-
-	return err
+	return cf.NewWithAPIToken(c.SecretKey)
 
 }
 
