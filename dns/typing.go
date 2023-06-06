@@ -8,7 +8,7 @@ type DnsProvider interface {
 	ListZones() ([]*Zone, error)
 
 	// Detail a zones
-	DetailZone(domain string) (*Zone, error)
+	DetailZone(zone *Zone) (*Zone, error)
 
 	// Create a new zone
 	CreateZone(zone *Zone) error

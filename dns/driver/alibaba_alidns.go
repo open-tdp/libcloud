@@ -15,6 +15,15 @@ type AlibabaAlidnsDriver struct {
 	rq     *provider.ReqeustParam
 }
 
+func NewAlibabaAlidnsDriver(rq *provider.ReqeustParam) *AlibabaAlidnsDriver {
+
+	client := alibaba.NewClient(rq)
+	alidns, _ := client.Alidns()
+
+	return &AlibabaAlidnsDriver{client, alidns, rq}
+
+}
+
 func (p *AlibabaAlidnsDriver) ListZones() ([]*dns.Zone, error) {
 
 	resp, err := p.alidns.DescribeDomains(&alidns.DescribeDomainsRequest{})
@@ -37,10 +46,10 @@ func (p *AlibabaAlidnsDriver) ListZones() ([]*dns.Zone, error) {
 
 }
 
-func (p *AlibabaAlidnsDriver) DetailZone(domain string) (*dns.Zone, error) {
+func (p *AlibabaAlidnsDriver) DetailZone(zone *dns.Zone) (*dns.Zone, error) {
 
 	resp, err := p.alidns.DescribeDomainInfo(&alidns.DescribeDomainInfoRequest{
-		DomainName: tea.String(domain),
+		DomainName: tea.String(zone.Domain),
 	})
 
 	if err != nil {
@@ -52,7 +61,7 @@ func (p *AlibabaAlidnsDriver) DetailZone(domain string) (*dns.Zone, error) {
 		dnsServers = append(dnsServers, *dnsServer)
 	}
 
-	zone := &dns.Zone{
+	data := &dns.Zone{
 		Id:          *resp.Body.DomainId,
 		Domain:      *resp.Body.DomainName,
 		DnsServers:  dnsServers,
@@ -60,26 +69,26 @@ func (p *AlibabaAlidnsDriver) DetailZone(domain string) (*dns.Zone, error) {
 		Description: *resp.Body.Remark,
 	}
 
-	return zone, nil
+	return data, nil
 
 }
 
-func (p *AlibabaAlidnsDriver) CreateZone(domain string) (*dns.Zone, error) {
+func (p *AlibabaAlidnsDriver) CreateZone(zone *dns.Zone) (*dns.Zone, error) {
 
 	resp, err := p.alidns.AddDomain(&alidns.AddDomainRequest{
-		DomainName: tea.String(domain),
+		DomainName: tea.String(zone.Domain),
 	})
 
 	if err != nil {
 		return nil, err
 	}
 
-	zone := &dns.Zone{
+	data := &dns.Zone{
 		Id:     *resp.Body.DomainId,
 		Domain: *resp.Body.DomainName,
 	}
 
-	return zone, nil
+	return data, nil
 
 }
 
