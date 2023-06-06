@@ -8,7 +8,7 @@ type DnsProvider interface {
 	ListZones() ([]*Zone, error)
 
 	// Detail a zones
-	DetailZone() ([]*Zone, error)
+	DetailZone(domain string) (*Zone, error)
 
 	// Create a new zone
 	CreateZone(zone *Zone) error
@@ -41,21 +41,25 @@ type DnsProvider interface {
 // Zone represents a Dns zone
 
 type Zone struct {
-	Id     string
-	Domain string
-	Type   ZoneType
-	TTL    int
-	Extra  map[string]interface{}
+	Id          string
+	Domain      string
+	Type        ZoneType
+	CreateTime  int
+	DnsServers  []string
+	MinTTL      int
+	Description string
+	Extra       map[string]interface{}
 }
 
 // Record represents a Dns record
 
 type Record struct {
-	Id    string
-	Name  string
-	Type  RecordType
-	Data  string
-	Zone  *Zone
-	TTL   int
-	Extra map[string]interface{}
+	Id          string
+	Name        string
+	Type        RecordType
+	Value       string
+	Zone        *Zone
+	TTL         int
+	Description string
+	Extra       map[string]interface{}
 }
