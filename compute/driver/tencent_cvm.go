@@ -6,7 +6,6 @@ import (
 	"github.com/open-tdp/go-libcloud/provider/tencent"
 
 	cbs "github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/cbs/v20170312"
-	"github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common"
 	cvm "github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/cvm/v20170312"
 )
 
@@ -362,10 +361,12 @@ func (p *TencentCvmDriver) ListSnapshots(node *compute.Node) ([]*compute.VolumeS
 		volumeIds = append(volumeIds, &volume.Id)
 	}
 
+	filterName := "disk-id"
+
 	resp, err := p.cbs.DescribeSnapshots(&cbs.DescribeSnapshotsRequest{
 		Filters: []*cbs.Filter{
 			{
-				Name:   common.StringPtr("disk-id"),
+				Name:   &filterName,
 				Values: volumeIds,
 			},
 		},
