@@ -43,6 +43,7 @@ type DnsProvider interface {
 type Zone struct {
 	Id          string
 	Domain      string
+	PunyCode    string
 	Type        ZoneType
 	CreateTime  int
 	DnsServers  []string
@@ -58,8 +59,9 @@ type Record struct {
 	Name        string
 	Type        RecordType
 	Value       string
-	Zone        *Zone
+	Line        string
 	TTL         int
+	Priority    int
 	Description string
 	Extra       map[string]interface{}
 }

@@ -35,9 +35,16 @@ func (p *AlibabaAlidnsDriver) ListZones() ([]*dns.Zone, error) {
 	zones := make([]*dns.Zone, 0)
 
 	for _, domain := range resp.Body.Domains.Domain {
+		dnsServers := make([]string, 0)
+		for _, dnsServer := range domain.DnsServers.DnsServer {
+			dnsServers = append(dnsServers, *dnsServer)
+		}
+
 		zones = append(zones, &dns.Zone{
 			Id:         *domain.DomainId,
 			Domain:     *domain.DomainName,
+			PunyCode:   *domain.PunyCode,
+			DnsServers: dnsServers,
 			CreateTime: int(*domain.CreateTimestamp),
 		})
 	}
@@ -64,6 +71,7 @@ func (p *AlibabaAlidnsDriver) DetailZone(zone *dns.Zone) (*dns.Zone, error) {
 	data := &dns.Zone{
 		Id:          *resp.Body.DomainId,
 		Domain:      *resp.Body.DomainName,
+		PunyCode:    *resp.Body.PunyCode,
 		DnsServers:  dnsServers,
 		MinTTL:      int(*resp.Body.MinTtl),
 		Description: *resp.Body.Remark,
@@ -133,11 +141,12 @@ func (p *AlibabaAlidnsDriver) ListRecords(zone *dns.Zone) ([]*dns.Record, error)
 		recordType := dns.RecordType(*record.Type)
 
 		records = append(records, &dns.Record{
-			Id:    *record.RecordId,
-			Name:  *record.RR,
-			Type:  recordType,
-			Value: *record.Value,
-			TTL:   int(*record.TTL),
+			Id:       *record.RecordId,
+			Name:     *record.RR,
+			Type:     recordType,
+			Value:    *record.Value,
+			TTL:      int(*record.TTL),
+			Priority: int(*record.Priority),
 		})
 	}
 
@@ -163,7 +172,6 @@ func (p *AlibabaAlidnsDriver) DetailRecord(zone *dns.Zone, record *dns.Record) (
 		Type:  recordType,
 		Value: *resp.Body.Value,
 		TTL:   int(*resp.Body.TTL),
-		Zone:  zone,
 	}
 
 	return record, nil
@@ -185,8 +193,7 @@ func (p *AlibabaAlidnsDriver) CreateRecord(zone *dns.Zone, record *dns.Record) (
 	}
 
 	record = &dns.Record{
-		Id:   *resp.Body.RecordId,
-		Zone: zone,
+		Id: *resp.Body.RecordId,
 	}
 
 	return record, nil

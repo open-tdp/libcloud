@@ -129,12 +129,14 @@ func (p *CloudflareDnsDriver) ListRecords(zone *dns.Zone) ([]*dns.Record, error)
 
 	for _, record := range resp {
 		recordType := dns.RecordType(record.Type)
+
 		records = append(records, &dns.Record{
-			Id:    record.ID,
-			Name:  record.Name,
-			Type:  recordType,
-			Value: record.Content,
-			TTL:   record.TTL,
+			Id:       record.ID,
+			Name:     record.Name,
+			Type:     recordType,
+			Value:    record.Content,
+			TTL:      record.TTL,
+			Priority: int(*record.Priority),
 		})
 	}
 
