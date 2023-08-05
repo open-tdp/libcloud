@@ -1,9 +1,9 @@
 package drivers
 
 import (
-	"github.com/open-tdp/go-libcloud/dns"
-	"github.com/open-tdp/go-libcloud/provider"
-	"github.com/open-tdp/go-libcloud/provider/alibaba"
+	"github.com/opentdp/go-libcloud/dns"
+	"github.com/opentdp/go-libcloud/provider"
+	"github.com/opentdp/go-libcloud/provider/alibaba"
 
 	alidns "github.com/alibabacloud-go/alidns-20150109/v4/client"
 	"github.com/alibabacloud-go/tea/tea"

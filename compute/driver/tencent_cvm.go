@@ -1,9 +1,9 @@
 package drivers
 
 import (
-	"github.com/open-tdp/go-libcloud/compute"
-	"github.com/open-tdp/go-libcloud/provider"
-	"github.com/open-tdp/go-libcloud/provider/tencent"
+	"github.com/opentdp/go-libcloud/compute"
+	"github.com/opentdp/go-libcloud/provider"
+	"github.com/opentdp/go-libcloud/provider/tencent"
 
 	cbs "github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/cbs/v20170312"
 	cvm "github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/cvm/v20170312"

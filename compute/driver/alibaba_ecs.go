@@ -1,9 +1,9 @@
 package drivers
 
 import (
-	"github.com/open-tdp/go-libcloud/compute"
-	"github.com/open-tdp/go-libcloud/provider"
-	"github.com/open-tdp/go-libcloud/provider/alibaba"
+	"github.com/opentdp/go-libcloud/compute"
+	"github.com/opentdp/go-libcloud/provider"
+	"github.com/opentdp/go-libcloud/provider/alibaba"
 
 	ecs "github.com/alibabacloud-go/ecs-20140526/v3/client"
 	"github.com/alibabacloud-go/tea/tea"

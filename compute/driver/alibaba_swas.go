@@ -1,9 +1,9 @@
 package drivers
 
 import (
-	"github.com/open-tdp/go-libcloud/compute"
-	"github.com/open-tdp/go-libcloud/provider"
-	"github.com/open-tdp/go-libcloud/provider/alibaba"
+	"github.com/opentdp/go-libcloud/compute"
+	"github.com/opentdp/go-libcloud/provider"
+	"github.com/opentdp/go-libcloud/provider/alibaba"
 
 	swas "github.com/alibabacloud-go/swas-open-20200601/client"
 )
